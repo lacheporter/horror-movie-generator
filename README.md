@@ -1,2 +1,2 @@
-# qr-generator
+# tcg-automation
 Generate QR Codes Automation
