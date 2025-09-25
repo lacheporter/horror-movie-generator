@@ -1,3 +1,6 @@
+/* Import scary fonts */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Butcherman&display=swap');
+
 /* Horror Roulette - Main Stylesheet */
 
 * {
@@ -25,15 +28,31 @@ body {
 }
 
 .header h1 {
+    font-family: 'Creepster', cursive;
     font-size: 3rem;
     color: #ff4757;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(255, 71, 87, 0.5);
     margin-bottom: 10px;
+    letter-spacing: 2px;
 }
 
 .header p {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     color: #cccccc;
+}
+
+/* Mood Header */
+.mood-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mood-header h2 {
+    font-size: 2rem;
+    color: #ff4757;
+    margin: 0;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 /* Categories Section */
@@ -84,43 +103,667 @@ body {
 .category-description {
     font-size: 0.7rem;
     color: #cccccc;
+    margin-bottom: 10px;
+}
+
+.dice-icon {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #ff4757;
+    transition: transform 0.3s ease;
+}
+
+.mood-spin-card:hover .dice-icon {
+    transform: scale(1.1);
+}
+
+.mood-spin-card.spinning {
+    animation: pulse 1s infinite;
+}
+
+.mood-spin-card.spinning .dice-icon i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Featured Recommendation Section */
+.featured-section {
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+}
+
+#featuredMovie {
+    position: static;
+}
+
+.featured-title {
+    font-size: 2rem;
+    color: #ff4757;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.featured-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    padding: 10px;
+    border: 2px solid rgba(255, 71, 87, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-card:hover {
+    border-color: #ff4757;
+    box-shadow: 0 15px 35px rgba(255, 71, 87, 0.2);
+    transform: translateY(-5px);
+}
+
+.featured-poster {
+    width: 120px;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* Make featured VHS look like the category VHS tapes */
+.featured-vhs {
+    width: 350px;
+    height: 160px;
+    flex-shrink: 0;
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    border-radius: 8px;
+    box-shadow: 
+        0 4px 8px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    border: 1px solid #333;
+    transform: perspective(400px) rotateY(-2deg);
+    transition: transform 0.3s ease;
+}
+
+.featured-card:hover .featured-vhs {
+    transform: perspective(400px) rotateY(0deg);
+}
+
+/* VHS Tape Structure - matching category cards */
+.featured-vhs .vhs-top {
+    height: 25px;
+    background: linear-gradient(180deg, #444, #222);
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #111;
+}
+
+.featured-vhs .vhs-brand {
+    font-size: 0.6rem;
+    font-weight: bold;
+    color: #ff4757;
+    letter-spacing: 2px;
+}
+
+.featured-vhs .vhs-main {
+    height: 110px;
+    background: linear-gradient(90deg, #333, #222, #333);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    position: relative;
+}
+
+.featured-vhs .vhs-label {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    height: 85px;
+    margin: 0 10px;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Courier New', monospace;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.featured-vhs .vhs-cassette-section {
+    background: #f0f0f0;
+    padding: 3px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+}
+
+.featured-vhs .vhs-cassette-text {
+    font-size: 0.5rem;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 1px;
+}
+
+.featured-vhs .vhs-content-section {
+    flex: 1;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.featured-vhs .vhs-title {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 2px;
+    line-height: 1.1;
+}
+
+.featured-vhs .vhs-year {
+    font-size: 0.6rem;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.featured-vhs .vhs-category {
+    font-size: 0.55rem;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.featured-vhs .vhs-rating-section {
+    padding: 4px 8px;
+    border-top: 1px solid #ddd;
+    background: #f8f8f8;
+}
+
+.featured-vhs .vhs-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.featured-vhs .rating-stars {
+    font-size: 0.6rem;
+    color: #ff4757;
+}
+
+.featured-vhs .vhs-rating span:last-child {
+    font-size: 0.5rem;
+    color: #666;
+    font-weight: bold;
+}
+
+.featured-vhs .tape-reel {
+    width: 35px;
+    height: 35px;
+    background: radial-gradient(circle, #111 30%, #444 70%);
+    border-radius: 50%;
+    position: relative;
+    border: 2px solid #555;
+}
+
+.featured-vhs .tape-reel-center {
+    width: 12px;
+    height: 12px;
+    background: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.featured-vhs .vhs-bottom {
+    height: 25px;
+    background: linear-gradient(180deg, #222, #444);
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 20px;
+}
+
+.featured-vhs .vhs-screw {
+    width: 4px;
+    height: 4px;
+    background: #666;
+    border-radius: 50%;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+}
+
+.featured-details {
+    flex: 1;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.featured-overview {
+    color: #cccccc;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.featured-rate-btn {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.featured-card.mood-result {
+    border-color: #ff4757;
+    box-shadow: 0 15px 35px rgba(255, 71, 87, 0.3);
+    animation: slideInFromRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    justify-content: center;
+}
+
+.featured-card.mood-result .featured-vhs {
+    transform: perspective(400px) rotateY(0deg) scale(1.1);
+    margin: 0 20px;
+}
+
+.featured-card.mood-result .featured-details {
+    max-width: 400px;
+}
+
+.featured-movie-container {
+    overflow: visible;
+    height: auto;
+    min-height: 140px;
+    width: 260px;
+    margin: 5px auto;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.featured-movie-display {
+    display: flex;
+    flex-direction: row;
+    height: 140px;
+    width: 100%;
+    position: relative;
+}
+
+.featured-movie-display .movie-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 180px;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px 0 0 8px;
+}
+
+.featured-movie-display .vhs-container {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 160px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 3;
+    background: linear-gradient(145deg, #282727, #2f2d2d);
+    border-radius: 4px;
+    border: 2px solid #333;
+}
+
+@keyframes slideInFromRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    40% {
+        opacity: 0.6;
+        transform: translateX(10%) scale(1.05);
+    }
+    60% {
+        opacity: 0.8;
+        transform: translateX(-5%) scale(1.02);
+    }
+    80% {
+        opacity: 0.9;
+        transform: translateX(2%) scale(1.01);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+/* Add a "click" effect when VHS slides into place */
+.featured-card.mood-result .featured-vhs {
+    animation: vhsInsert 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes vhsInsert {
+    0% {
+        transform: perspective(400px) rotateY(15deg) scale(0.9);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    70% {
+        transform: perspective(400px) rotateY(-2deg) scale(1.12);
+        box-shadow: 0 8px 20px rgba(255, 71, 87, 0.2);
+    }
+    100% {
+        transform: perspective(400px) rotateY(0deg) scale(1.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+}
+
+@keyframes slideOutToLeft {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+
+.featured-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.featured-rate-btn, .spin-different-btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    flex: 1;
+    min-width: 140px;
+}
+
+.featured-rate-btn {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    color: white;
+}
+
+.spin-different-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cccccc;
+    border: 2px solid rgba(255, 71, 87, 0.5);
+}
+
+.featured-rate-btn:hover {
+    background: linear-gradient(135deg, #ff3742, #ff2834);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+}
+
+.spin-different-btn:hover {
+    background: rgba(255, 71, 87, 0.2);
+    border-color: #ff4757;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.retry-btn {
+    background: linear-gradient(135deg, #333, #555);
+    border: 2px solid #ff4757;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.retry-btn:hover {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    transform: translateY(-1px);
+}
+
+.loading-featured i.fa-dice {
+    animation: spin 1s linear infinite;
+}
+
+.loading-featured, .featured-error {
+    text-align: center;
+    color: #cccccc;
+    padding: 40px;
+    position: relative;
+}
+
+.loading-featured i {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    color: #ff4757;
+}
+
+.loading-featured::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.1), transparent);
+    animation: slidePreview 1.5s ease-in-out infinite;
+}
+
+@keyframes slidePreview {
+    0% {
+        transform: translateX(-100%);
+    }
+    50% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.featured-error {
+    background: rgba(255, 71, 87, 0.1);
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.featured-error i {
+    font-size: 2rem;
+    color: #ff4757;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Responsive Design for Featured Section */
+@media (max-width: 768px) {
+    .featured-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+    
+    .featured-details {
+        padding-left: 0;
+        text-align: center;
+    }
+    
+    .featured-poster {
+        align-self: center;
+    }
+    
+    .featured-title {
+        font-size: 1.5rem;
+    }
+    
+    .featured-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .featured-actions .featured-rate-btn,
+    .featured-actions .spin-different-btn {
+        min-width: auto;
+        flex: none;
+    }
+}
+
+/* Movies Grid */
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Single Movie Result Display */
+.single-movie-result {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.spin-result-title {
+    font-size: 1.8rem;
+    color: #ff4757;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.movie-card.featured {
+    transform: scale(1.1);
+    margin-bottom: 30px;
+    box-shadow: 0 15px 35px rgba(255, 71, 87, 0.3);
+}
+
+.movie-overview {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.movie-overview h3 {
+    color: #ff4757;
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.movie-overview p {
+    color: #cccccc;
+    line-height: 1.6;
+}
+
+.spin-again-section {
+    margin-top: 20px;
+}
+
+.spin-again-btn {
+    background: linear-gradient(135deg, #333, #555);
+    border: 2px solid #ff4757;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.spin-again-btn:hover {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
 }
 
 /* Movies Grid */
 .movies-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 25px;
     margin-top: 30px;
 }
 
 /* VHS Movie Card Styling */
 .movie-card {
-    background: linear-gradient(145deg, #282727, #2f2d2d);
-    border: 2px solid #333;
-    border-radius: 6px;
-    overflow: visible;
-    transition: all 0.3s ease;
+    overflow: hidden;
     height: 180px;
-    width: 280px;
+    width: 320px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+   
+}
+
+/* Movie Poster Left Side with Extension */
+.movie-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;  /* Extends under 3/4 of VHS tape */
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    z-index: 1;
+    border: 2px solid #333;
+    border-right: none;
+    border-radius: 6px 0 0 6px;
+}
+
+
+
+/* VHS Container - Floating Over Right Side of Poster */
+.vhs-container {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 220px;
+    height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: 
-        inset 0 2px 0 rgba(255,255,255,0.1),
-        inset 0 -2px 0 rgba(0,0,0,0.8),
-        0 8px 25px rgba(0,0,0,0.6);
+    z-index: 3;
+    background: linear-gradient(145deg, #282727, #2f2d2d);
+    border-radius: 4px;
+    border: 2px solid #333;
+  
 }
 
-.movie-card:hover {
-    transform: translateY(-5px) rotateX(2deg);
-    border-color: #ff4757;
+.vhs-container:hover {
+    transform: translateY(-5px);
     box-shadow: 
-        inset 0 2px 0 rgba(255,255,255,0.15),
-        inset 0 -2px 0 rgba(0,0,0,0.8),
-        0 15px 35px rgba(0,0,0,0.7),
-        0 10px 20px rgba(255, 71, 87, 0.4);
+        0 12px 24px rgba(0, 0, 0, 0.8),
+        0 0 12px rgba(255, 71, 87, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.15),
+        0 2px 8px rgba(255, 255, 255, 0.15),
+        0 -2px 8px rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 71, 87, 0.7);
+    transition: all 0.3s ease;
 }
 
 /* VHS Top Section with Brand Label */
@@ -150,25 +793,26 @@ body {
     border-top: 1px solid #444;
     border-bottom: 1px solid #444;
     overflow: hidden;
-    height: 100px;
+    height: 80px;
+    flex: 1;
 }
 
 /* Tape Reels */
 .tape-reel {
     position: relative;
     background-color: white;
-    height: 100px;
-    width: 100px;
+    height: 70px;
+    width: 70px;
     border: white;
     flex: 1;
 }
 
 .tape-reel.left {
-    border-radius: 50px 0 0 50px;
+    border-radius: 35px 0 0 35px;
 }
 
 .tape-reel.right {
-    border-radius: 0 50px 50px 0;
+    border-radius: 0 35px 35px 0;
 }
 
 .tape-reel-center {
@@ -176,8 +820,8 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
 }
 
@@ -295,6 +939,291 @@ body {
     font-size: 0.4rem;
 }
 
+.vhs-prediction {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.42rem;
+    color: #ff4757;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 2px;
+    text-shadow: 0 0 3px rgba(255, 71, 87, 0.5);
+}
+
+/* Trailer Section - Small corner button relative to featured-section */
+.trailer-section {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.trailer-btn {
+    display: inline-block;
+    
+    color: white;
+    text-decoration: none;
+    padding: 4px 6px;
+   
+    font-size: 0.5rem;
+    font-weight: bold;
+ 
+
+}
+
+.trailer-btn:hover {
+    background: rgba(204, 0, 0, 0.9);
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.trailer-btn i {
+    margin-right: 3px;
+    font-size: 0.65rem;
+}
+
+.rate-btn {
+    background: #ff4757;
+    color: white;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.4rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.rate-btn:hover {
+    background: #ff3838;
+}
+
+/* Modal Styles */
+.modal {
+    display: none !important;
+    position: fixed !important;
+    z-index: 10000 !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: rgba(0,0,0,0.8) !important;
+    overflow: auto !important;
+}
+
+.modal[style*="display: block"] {
+    display: block !important;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #2d1b1b, #1a1a1a) !important;
+    margin: 10% auto !important;
+    padding: 0 !important;
+    border: 2px solid #ff4757 !important;
+    border-radius: 15px !important;
+    width: 90% !important;
+    max-width: 400px !important;
+    color: white !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.9) !important;
+    position: relative !important;
+    z-index: 10001 !important;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #ff4757;
+}
+
+.close {
+    color: #ccc;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #ff4757;
+}
+
+.modal-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-body h3 {
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.rating-input {
+    margin: 20px 0;
+}
+
+.rating-input label {
+    display: block;
+    margin-bottom: 10px;
+    color: #cccccc;
+}
+
+#ratingSlider {
+    width: 100%;
+    margin: 10px 0;
+    background: #333;
+    outline: none;
+    height: 8px;
+    border-radius: 5px;
+}
+
+#ratingSlider::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff4757;
+    cursor: pointer;
+}
+
+#ratingSlider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ff4757;
+    cursor: pointer;
+    border: none;
+}
+
+#ratingValue {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff4757;
+}
+
+.star-display {
+    font-size: 1.5rem;
+    margin: 15px 0;
+}
+
+.modal-footer {
+    padding: 20px;
+    border-top: 1px solid #333;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-secondary {
+    background: #666;
+}
+
+.btn-secondary:hover {
+    background: #555;
+}
+
+.btn-primary {
+    background: #ff4757;
+}
+
+.btn-primary:hover {
+    background: #ff3838;
+}
+
+.btn-danger {
+    background: #dc3545;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+/* Action Modal Specific Styles */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.action-btn {
+    padding: 15px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* Featured Movie Action Buttons */
+.featured-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 15px;
+    flex-wrap: nowrap;
+}
+
+.featured-action-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 120px;
+    justify-content: center;
+    flex: 1;
+    white-space: nowrap;
+}
+
+.featured-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+.btn-tertiary {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: white;
+}
+
+.btn-tertiary:hover {
+    background: linear-gradient(135deg, #5f3dc4, #8b7ed8);
+}
+
+@media (max-width: 768px) {
+    .featured-actions {
+        gap: 8px;
+        padding: 10px;
+    }
+    
+    .featured-action-btn {
+        min-width: 100px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+}
+
 /* Bottom screw indicators */
 .vhs-bottom {
     display: flex;
@@ -349,12 +1278,103 @@ body {
     transform: translateY(-2px);
 }
 
+/* Watched Movies Slider Section */
+.watched-movies-section {
+    margin: 30px 0;
+    padding: 0 20px;
+}
+
+.section-title {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    text-align: left;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.section-title i {
+    color: #ff4757;
+    margin-right: 10px;
+}
+
+.watched-movies-slider {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+}
+
+.watched-movies-slider::-webkit-scrollbar {
+    height: 8px;
+}
+
+.watched-movies-slider::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.watched-movies-slider::-webkit-scrollbar-thumb {
+    background: #ff4757;
+    border-radius: 10px;
+}
+
+.watched-movies-slider::-webkit-scrollbar-thumb:hover {
+    background: #ff3742;
+}
+
+.slider-movie-card {
+    min-width: 280px;
+    height: 160px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: row;
+}
+
+.slider-movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+}
+
+.slider-movie-card .movie-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 180px;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 8px 0 0 8px;
+}
+
+.slider-movie-card .vhs-container {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 160px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 3;
+    background: linear-gradient(145deg, #282727, #2f2d2d);
+    border-radius: 4px;
+    border: 2px solid #333;
+}
+
 /* Stats Panel */
 .stats-panel {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     padding: 20px;
-    margin-bottom: 30px;
+    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 .stats-grid {

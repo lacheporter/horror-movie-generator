@@ -12,15 +12,83 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎬 Horror Roulette</h1>
+            <h1>Horror Roulette</h1>
             <p>Discover your next favorite horror experience</p>
         </div>
         
+        <!-- Featured Movie Section - Shows mood selection or movie recommendation -->
+        <div class="featured-section" id="featuredSection">
+            <div class="mood-header" id="defaultMoodHeader">
+                <h2>I'm feeling...</h2>
+            </div>
+            <div class="featured-movie" id="featuredMovie" style="display: none;"></div>
+            <div class="featured-actions" id="featuredActions" style="display: none;">
+                <button class="btn btn-primary featured-action-btn" id="rateMovieBtn">
+                    <i class="fas fa-star"></i> Rate This Movie
+                </button>
+                <button class="btn btn-secondary featured-action-btn" id="movieInfoBtn">
+                    <i class="fas fa-info-circle"></i> Movie Info
+                </button>
+                <button class="btn btn-tertiary featured-action-btn" id="watchTrailerBtn">
+                    <i class="fas fa-play"></i> Watch Trailer
+                </button>
+            </div>
+        </div>
+        
+        <div class="categories">
+            <div class="category-card mood-spin-card" data-category="gory" onclick="spinForMood('gory', this)">
+                <div class="category-icon"><i class="fas fa-tint"></i></div>
+                <div class="category-name">Gory</div>
+                <div class="category-description">Blood, violence, and brutal visuals</div>
+            </div>
+            <div class="category-card mood-spin-card" data-category="creepy" onclick="spinForMood('creepy', this)">
+                <div class="category-icon"><i class="fas fa-eye"></i></div>
+                <div class="category-name">Creepy</div>
+                <div class="category-description">Psychologically unsettling</div>
+            </div>
+            <div class="category-card mood-spin-card" data-category="mysterious" onclick="spinForMood('mysterious', this)">
+                <div class="category-icon"><i class="fas fa-search"></i></div>
+                <div class="category-name">Mysterious</div>
+                <div class="category-description">Puzzles and hidden secrets</div>
+            </div>
+            <div class="category-card mood-spin-card" data-category="jumpscare" onclick="spinForMood('jumpscare', this)">
+                <div class="category-icon"><i class="fas fa-ghost"></i></div>
+                <div class="category-name">Jumpscare</div>
+                <div class="category-description">Sudden scares and frights</div>
+            </div>
+            <div class="category-card mood-spin-card" data-category="body-horror" onclick="spinForMood('body-horror', this)">
+                <div class="category-icon"><i class="fas fa-user-injured"></i></div>
+                <div class="category-name">Body Horror</div>
+                <div class="category-description">Disturbing bodily transformations</div>
+            </div>
+            <div class="category-card mood-spin-card" data-category="paranoid" onclick="spinForMood('paranoid', this)">
+                <div class="category-icon"><i class="fas fa-brain"></i></div>
+                <div class="category-name">Paranoia</div>
+                <div class="category-description">Question reality and trust</div>
+            </div>
+        </div>
+        
+        <!-- Watched Movies Slider Section -->
+        <div class="watched-movies-section">
+            <h3 class="section-title"><i class="fas fa-film"></i> Your Watched Movies</h3>
+            <div class="watched-movies-slider" id="watchedMoviesSlider">
+                <!-- Movies will be loaded here -->
+            </div>
+        </div>
+        
+        <div id="moviesContainer">
+            <div class="loading" id="loading" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i> Loading movies...
+            </div>
+            <div class="movies-grid" id="moviesGrid"></div>
+        </div>
+        
+        <!-- Stats Panel - Moved to bottom -->
         <div class="stats-panel" id="statsPanel">
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-number" id="totalMovies">-</div>
-                    <div class="stat-label">Total Movies</div>
+                    <div class="stat-label">Total Movies Watched</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-number" id="avgRating">-</div>
@@ -32,47 +100,286 @@
                 </div>
             </div>
         </div>
-        
-        <div class="categories">
-            <div class="category-card" data-category="gory">
-                <div class="category-icon"><i class="fas fa-tint"></i></div>
-                <div class="category-name">Gory</div>
-                <div class="category-description">Blood, violence, and brutal visuals</div>
+    </div>
+    
+    <!-- Action Modal for VHS tapes -->
+    <div id="actionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Movie Actions</h2>
+                <span class="close" onclick="closeActionModal()">&times;</span>
             </div>
-            <div class="category-card" data-category="creepy">
-                <div class="category-icon"><i class="fas fa-eye"></i></div>
-                <div class="category-name">Creepy</div>
-                <div class="category-description">Psychologically unsettling</div>
-            </div>
-            <div class="category-card" data-category="mysterious">
-                <div class="category-icon"><i class="fas fa-search"></i></div>
-                <div class="category-name">Mysterious</div>
-                <div class="category-description">Puzzles and hidden secrets</div>
-            </div>
-            <div class="category-card" data-category="jumpscare">
-                <div class="category-icon"><i class="fas fa-ghost"></i></div>
-                <div class="category-name">Jumpscare</div>
-                <div class="category-description">Sudden scares and frights</div>
+            <div class="modal-body">
+                <h3 id="movieTitleForAction">Movie Title</h3>
+                <p>What would you like to do with this movie?</p>
+                <div class="action-buttons">
+                    <button class="btn btn-primary action-btn" onclick="markAsWatched()">
+                        <i class="fas fa-eye"></i> Mark as Watched
+                    </button>
+                    <button class="btn btn-secondary action-btn" onclick="rateFromAction()">
+                        <i class="fas fa-star"></i> Rate Movie
+                    </button>
+                </div>
             </div>
         </div>
-        
-        <div style="text-align: center; margin-bottom: 30px;">
-            <button class="btn" onclick="loadAllMovies()"><i class="fas fa-film"></i> Show All Movies</button>
-            <button class="btn" onclick="loadRecommendations()"><i class="fas fa-star"></i> Get Recommendations</button>
-            <button class="btn" onclick="loadPredictions()"><i class="fas fa-crystal-ball"></i> Rating Predictions</button>
-        </div>
-        
-        <div id="moviesContainer">
-            <div class="loading" id="loading" style="display: none;">
-                <i class="fas fa-spinner fa-spin"></i> Loading movies...
+    </div>
+    
+    <!-- Rating Modal -->
+    <div id="ratingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Rate Movie</h2>
+                <span class="close" onclick="closeRatingModal()">&times;</span>
             </div>
-            <div class="movies-grid" id="moviesGrid"></div>
+            <div class="modal-body">
+                <h3 id="movieTitleToRate">Movie Title</h3>
+                <div class="rating-input">
+                    <label for="ratingSlider">Your Rating (1-10):</label>
+                    <input type="range" id="ratingSlider" min="1" max="10" step="0.5" value="5">
+                    <span id="ratingValue">5.0</span>/10
+                </div>
+                <div class="star-display">
+                    <span id="starDisplay">★★★★★☆☆☆☆☆</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRatingModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitRating()">Rate Movie</button>
+                <button class="btn btn-danger" id="removeRatingBtn" onclick="removeRating()" style="display: none;">Remove Rating</button>
+            </div>
         </div>
     </div>
     
     <script>
         const API_BASE = 'http://localhost:8000/api/movies';
         const TMDB_IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
+        
+        let currentMovieToRate = null;
+        let isLoadingMood = false; // Track if we're currently loading a mood
+        let currentMovieForAction = null; // Track movie for action modal
+        let currentFeaturedMovie = null; // Track the currently featured movie
+        
+        // Action Modal Functions
+        function showActionModal(movieTitle) {
+            console.log('showActionModal called with:', movieTitle);
+            currentMovieForAction = movieTitle;
+            
+            const modal = document.getElementById('actionModal');
+            const titleElement = document.getElementById('movieTitleForAction');
+            
+            console.log('Modal element:', modal);
+            console.log('Title element:', titleElement);
+            
+            if (titleElement) {
+                titleElement.textContent = movieTitle;
+                console.log('Title set to:', movieTitle);
+            }
+            
+            if (modal) {
+                console.log('Setting modal display to block');
+                modal.style.display = 'block';
+                modal.style.zIndex = '10000';
+                console.log('Modal display after setting:', modal.style.display);
+                console.log('Modal computed style:', window.getComputedStyle(modal).display);
+            } else {
+                console.error('Modal element not found!');
+            }
+        }
+        
+        function closeActionModal() {
+            console.log('closeActionModal called');
+            document.getElementById('actionModal').style.display = 'none';
+            currentMovieForAction = null;
+        }
+        
+        function markAsWatched() {
+            if (currentMovieForAction) {
+                // For now, just close the modal - you might want to implement actual "watched" functionality
+                closeActionModal();
+                alert(`"${currentMovieForAction}" marked as watched!`);
+            }
+        }
+        
+        function rateFromAction() {
+            if (currentMovieForAction) {
+                closeActionModal();
+                showRatingModal(currentMovieForAction);
+            }
+        }
+        
+        // Movie Info Modal Functions
+        function showMovieInfoModal(movie) {
+            currentMovieForAction = movie.title;
+            document.getElementById('movieTitleForAction').textContent = movie.title;
+            
+            // Update the action modal to show movie info instead
+            const modalBody = document.querySelector('#actionModal .modal-body');
+            modalBody.innerHTML = `
+                <h3>${movie.title}</h3>
+                <div style="margin: 20px 0;">
+                    <p><strong>Year:</strong> ${movie.year || 'Unknown'}</p>
+                    <p><strong>Genres:</strong> ${Array.isArray(movie.genres) ? movie.genres.join(', ') : 'Horror'}</p>
+                    <p><strong>TMDB Rating:</strong> ${movie.vote_average || 'N/A'}/10</p>
+                    <p><strong>Overview:</strong></p>
+                    <p style="text-align: left; line-height: 1.6; color: #cccccc;">${movie.overview || 'No overview available.'}</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary action-btn" onclick="showRatingModal('${movie.title}'); closeActionModal();">
+                        <i class="fas fa-star"></i> Rate This Movie
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('actionModal').style.display = 'block';
+        }
+        
+        // Add event listeners for movie interactions
+        function addMovieEventListeners() {
+            console.log('Adding movie event listeners...');
+            
+            // VHS container click handlers
+            const vhsContainers = document.querySelectorAll('.vhs-container[data-movie-title]');
+            console.log('Found VHS containers:', vhsContainers.length);
+            
+            vhsContainers.forEach((container, index) => {
+                const movieTitle = container.getAttribute('data-movie-title');
+                console.log(`Attaching listener to VHS ${index + 1}:`, movieTitle);
+                
+                container.addEventListener('click', function(e) {
+                    console.log('VHS container clicked:', movieTitle);
+                    showActionModal(movieTitle);
+                });
+            });
+            
+            // Rate button click handlers
+            const rateButtons = document.querySelectorAll('.rate-btn[data-rate-movie]');
+            console.log('Found rate buttons:', rateButtons.length);
+            
+            rateButtons.forEach((button, index) => {
+                const movieTitle = button.getAttribute('data-rate-movie');
+                console.log(`Attaching listener to rate button ${index + 1}:`, movieTitle);
+                
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent triggering the VHS container click
+                    console.log('Rate button clicked:', movieTitle);
+                    showRatingModal(movieTitle);
+                });
+            });
+            
+            console.log('Event listeners attached successfully');
+        }
+        
+        // Rating Modal Functions
+        function showRatingModal(movieTitle) {
+            currentMovieToRate = movieTitle;
+            document.getElementById('movieTitleToRate').textContent = movieTitle;
+            
+            // Check if movie already has a rating
+            const movies = JSON.parse(sessionStorage.getItem('allMovies') || '[]');
+            const movie = movies.find(m => m.title === movieTitle);
+            
+            if (movie && movie.rating) {
+                document.getElementById('ratingSlider').value = movie.rating;
+                document.getElementById('removeRatingBtn').style.display = 'inline-block';
+                updateRatingDisplay(movie.rating);
+            } else {
+                document.getElementById('ratingSlider').value = 5;
+                document.getElementById('removeRatingBtn').style.display = 'none';
+                updateRatingDisplay(5);
+            }
+            
+            document.getElementById('ratingModal').style.display = 'block';
+        }
+        
+        function closeRatingModal() {
+            document.getElementById('ratingModal').style.display = 'none';
+            currentMovieToRate = null;
+        }
+        
+        function updateRatingDisplay(rating) {
+            const ratingValue = document.getElementById('ratingValue');
+            const starDisplay = document.getElementById('starDisplay');
+            
+            ratingValue.textContent = parseFloat(rating).toFixed(1);
+            
+            // Update star display
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+            const emptyStars = 10 - fullStars - halfStar;
+            
+            starDisplay.textContent = 
+                '★'.repeat(fullStars) + 
+                (halfStar ? '☆' : '') + 
+                '☆'.repeat(emptyStars);
+        }
+        
+        async function submitRating() {
+            if (!currentMovieToRate) return;
+            
+            const rating = parseFloat(document.getElementById('ratingSlider').value);
+            
+            try {
+                const response = await fetch(`${API_BASE}/rate/${encodeURIComponent(currentMovieToRate)}?rating=${rating}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    closeRatingModal();
+                    loadAllMovies(); // Refresh the movies display
+                    loadStats(); // Refresh stats
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to rate movie: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Error rating movie:', error);
+                alert('Failed to rate movie. Please try again.');
+            }
+        }
+        
+        async function removeRating() {
+            if (!currentMovieToRate) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/rate/${encodeURIComponent(currentMovieToRate)}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    closeRatingModal();
+                    loadAllMovies(); // Refresh the movies display
+                    loadStats(); // Refresh stats
+                } else {
+                    const error = await response.json();
+                    alert(`Failed to remove rating: ${error.detail}`);
+                }
+            } catch (error) {
+                console.error('Error removing rating:', error);
+                alert('Failed to remove rating. Please try again.');
+            }
+        }
+        
+        // Update rating display when slider changes
+        document.addEventListener('DOMContentLoaded', () => {
+            const ratingSlider = document.getElementById('ratingSlider');
+            ratingSlider.addEventListener('input', (e) => {
+                updateRatingDisplay(e.target.value);
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            const ratingModal = document.getElementById('ratingModal');
+            const actionModal = document.getElementById('actionModal');
+            
+            if (event.target === ratingModal) {
+                closeRatingModal();
+            }
+            
+            if (event.target === actionModal) {
+                closeActionModal();
+            }
+        });
         
         // TMDB poster paths for sample movies (you can extend this)
         const MOVIE_POSTERS = {
@@ -107,7 +414,45 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadStats();
             loadAllMovies();
+            
+            // Test modal existence
+            const actionModal = document.getElementById('actionModal');
+            console.log('Action modal found:', !!actionModal);
+            if (actionModal) {
+                console.log('Modal display style:', actionModal.style.display);
+            }
+            
+            // Add event listeners for featured action buttons
+            document.getElementById('rateMovieBtn').addEventListener('click', () => {
+                if (currentFeaturedMovie) {
+                    showRatingModal(currentFeaturedMovie.title);
+                }
+            });
+            
+            document.getElementById('movieInfoBtn').addEventListener('click', () => {
+                if (currentFeaturedMovie) {
+                    showMovieInfoModal(currentFeaturedMovie);
+                }
+            });
+            
+            document.getElementById('watchTrailerBtn').addEventListener('click', () => {
+                if (currentFeaturedMovie) {
+                    const trailerUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(currentFeaturedMovie.title + ' ' + (currentFeaturedMovie.year || '') + ' trailer')}`;
+                    window.open(trailerUrl, '_blank');
+                }
+            });
         });
+        
+        async function loadMoviesByCategory(category) {
+            showLoading();
+            try {
+                const response = await fetch(`${API_BASE}/by-category/${category}`);
+                const movies = await response.json();
+                displayMovies(movies, `${category.charAt(0).toUpperCase() + category.slice(1)} Movies`);
+            } catch (error) {
+                showError(`Failed to load ${category} movies`);
+            }
+        }
         
         // Category selection
         document.querySelectorAll('.category-card').forEach(card => {
@@ -172,6 +517,270 @@
             }
         }
         
+        async function loadRandomRoulette() {
+            showLoading();
+            try {
+                const response = await fetch(`${API_BASE}/random-roulette`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const randomMovies = await response.json();
+                displayMovies(randomMovies, 'Random Horror Roulette');
+            } catch (error) {
+                console.error('Error loading random movies:', error);
+                showError(`Failed to load random movies: ${error.message}`);
+            }
+        }
+        
+        async function spinForMood(mood, cardElement = null) {
+            // Prevent multiple concurrent requests
+            if (isLoadingMood) {
+                console.log('Already loading a mood, ignoring click');
+                return;
+            }
+            
+            isLoadingMood = true;
+            
+            // Add visual feedback to the clicked card
+            if (cardElement) {
+                // Remove active state from all cards
+                document.querySelectorAll('.mood-spin-card').forEach(card => {
+                    card.classList.remove('spinning', 'active');
+                });
+                cardElement.classList.add('spinning', 'active');
+            }
+            
+            // Show loading in the featured section
+            showFeaturedLoading(`Loading ${mood} movie...`);
+            
+            try {
+                const response = await fetch(`${API_BASE}/spin-roulette/${mood}`);
+                
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error(`No unwatched ${mood} movies found. Try a different mood!`);
+                    }
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const movie = await response.json();
+                displayFeaturedMoodMovie(movie, mood);
+            } catch (error) {
+                console.error(`Error spinning for ${mood} movie:`, error);
+                
+                // Show error in featured section
+                const featuredSection = document.getElementById('featuredSection');
+                const featuredContainer = document.getElementById('featuredMovie');
+                const featuredTitle = document.getElementById('featuredTitle');
+                
+                featuredSection.style.display = 'block';
+                featuredTitle.innerHTML = `🚫 Oops! Something went wrong`;
+                
+                featuredContainer.innerHTML = `
+                    <div class="featured-error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Failed to find a ${mood} movie: ${error.message}</p>
+                        <button class="retry-btn" onclick="showMoodOptions()">
+                            <i class="fas fa-redo"></i> Try Again
+                        </button>
+                    </div>
+                `;
+            } finally {
+                // Reset state
+                isLoadingMood = false;
+                if (cardElement) {
+                    cardElement.classList.remove('spinning');
+                }
+            }
+        }
+        
+        function showFeaturedLoading(message) {
+            const defaultMoodHeader = document.getElementById('defaultMoodHeader');
+            const featuredContainer = document.getElementById('featuredMovie');
+            
+            // Hide the default mood header and show featured movie container
+            defaultMoodHeader.style.display = 'none';
+            featuredContainer.style.display = 'block';
+            
+            // Immediately show loading without animation delays
+            featuredContainer.innerHTML = `
+                <div class="loading-featured">
+                    <i class="fas fa-dice fa-spin"></i> ${message}
+                </div>
+            `;
+        }
+        
+        function displayFeaturedMoodMovie(movie, mood) {
+            const defaultMoodHeader = document.getElementById('defaultMoodHeader');
+            const featuredContainer = document.getElementById('featuredMovie');
+            const featuredActions = document.getElementById('featuredActions');
+            
+            // Store the current featured movie for the action buttons
+            currentFeaturedMovie = movie;
+            
+            // Hide the mood header and show featured movie container
+            defaultMoodHeader.style.display = 'none';
+            featuredContainer.style.display = 'block';
+            
+            // Create the same VHS design as the movies grid
+            const posterUrl = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '';
+            
+            featuredContainer.innerHTML = `
+                <div class="featured-card mood-result">
+                    <div class="featured-movie-container">
+                        <div class="featured-movie-display">
+                            ${posterUrl ? `<div class="movie-poster" style="background-image: url('${posterUrl}')"></div>` : ''}
+                            <div class="vhs-container">
+                                <div class="vhs-top">
+                                    <div class="vhs-brand">VHS</div>
+                                </div>
+                                <div class="vhs-main">
+                                    <div class="tape-reel left">
+                                        <div class="tape-reel-center"></div>
+                                    </div>
+                                    <div class="vhs-label">
+                                        <div class="vhs-cassette-section">
+                                            <div class="vhs-cassette-text">VIDEO CASSETTE</div>
+                                        </div>
+                                        <div class="vhs-content-section">
+                                            <div class="vhs-title">${movie.title.length > 16 ? movie.title.substring(0, 14) + '...' : movie.title}</div>
+                                            <div class="vhs-year">${movie.year || new Date().getFullYear()}</div>
+                                            <div class="vhs-category">${Array.isArray(movie.genres) ? movie.genres[0] : 'Horror'}</div>
+                                        </div>
+                                        <div class="vhs-rating-section">
+                                            <div class="vhs-rating">
+                                                <span class="rating-stars">${'★'.repeat(Math.round(movie.vote_average / 2))}</span>
+                                                <span>TMDB: ${movie.vote_average}/10</span>
+                                            </div>
+                                            <div class="vhs-prediction">
+                                                <span>🔮 You'll rate: ${generatePredictedRating(movie)}/10</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tape-reel right">
+                                        <div class="tape-reel-center"></div>
+                                    </div>
+                                </div>
+                                <div class="vhs-bottom">
+                                    <div class="vhs-screw"></div>
+                                    <div class="vhs-screw"></div>
+                                    <div class="vhs-screw"></div>
+                                    <div class="vhs-screw"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           `;
+            
+            // Show the action buttons
+            featuredActions.style.display = 'flex';
+            
+            // Clear any existing movie grid results
+            const moviesGrid = document.getElementById('moviesGrid');
+            moviesGrid.innerHTML = '';
+        }
+        
+        function showMoodOptions() {
+            // Reset loading state
+            isLoadingMood = false;
+            
+            // Show the default mood header and hide featured movie container
+            const defaultMoodHeader = document.getElementById('defaultMoodHeader');
+            const featuredContainer = document.getElementById('featuredMovie');
+            const featuredActions = document.getElementById('featuredActions');
+            
+            defaultMoodHeader.style.display = 'block';
+            featuredContainer.style.display = 'none';
+            featuredActions.style.display = 'none';
+            
+            // Clear the featured movie
+            currentFeaturedMovie = null;
+            
+            // Reset any card states
+            document.querySelectorAll('.mood-spin-card').forEach(card => {
+                card.classList.remove('spinning', 'active');
+            });
+        }
+        
+        function generatePredictedRating(movie) {
+            // Simple prediction algorithm based on TMDB rating and genre preferences
+            const tmdbRating = movie.vote_average || 6.0;
+            const baseRating = tmdbRating;
+            
+            // Add some realistic variation (+/- 1.5 points)
+            const variation = (Math.random() - 0.5) * 3; // -1.5 to +1.5
+            const predictedRating = Math.max(1, Math.min(10, baseRating + variation));
+            
+            return predictedRating.toFixed(1);
+        }
+        
+        function displaySingleMovie(movie, title = 'Your Movie') {
+            hideLoading();
+            const grid = document.getElementById('moviesGrid');
+            
+            // Cache movie data for rating modal
+            moviesCache = [movie];
+            
+            const posterUrl = getMoviePosterUrl(movie.title, movie.poster_path);
+            
+            grid.innerHTML = `
+                <div class="single-movie-result">
+                    <h2 class="spin-result-title">${title}</h2>
+                    <div class="movie-card featured">
+                        ${posterUrl ? `<div class="movie-poster" style="background-image: url('${posterUrl}')"></div>` : ''}
+                        <div class="vhs-container">
+                            <div class="vhs-top">
+                                <div class="vhs-brand">VHS</div>
+                            </div>
+                            <div class="vhs-main">
+                                <div class="tape-reel left">
+                                    <div class="tape-reel-center"></div>
+                                </div>
+                                <div class="vhs-label">
+                                    <div class="vhs-cassette-section">
+                                        <div class="vhs-cassette-text">VIDEO CASSETTE</div>
+                                    </div>
+                                    <div class="vhs-content-section">
+                                        <div class="vhs-title">${movie.title.length > 16 ? movie.title.substring(0, 14) + '...' : movie.title}</div>
+                                        <div class="vhs-year">${movie.year || 'N/A'}</div>
+                                        <div class="vhs-category">${Array.isArray(movie.genres) ? movie.genres[0] : 'Horror'}</div>
+                                    </div>
+                                    <div class="vhs-rating-section">
+                                        <div class="vhs-rating">
+                                            <span class="rating-stars">${'★'.repeat(Math.round(movie.vote_average / 2))}</span>
+                                            <span>TMDB: ${movie.vote_average}/10</span>
+                                            <button class="rate-btn" onclick="showRatingModal('${movie.title}')">Rate This</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tape-reel right">
+                                    <div class="tape-reel-center"></div>
+                                </div>
+                            </div>
+                            <div class="vhs-bottom">
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="movie-overview">
+                        <h3>Overview</h3>
+                        <p>${movie.overview || 'No overview available.'}</p>
+                    </div>
+                    <div class="spin-again-section">
+                        <button class="btn spin-again-btn" onclick="location.reload()">
+                            <i class="fas fa-redo"></i> Spin Again
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
         async function loadPredictions() {
             showLoading();
             try {
@@ -187,53 +796,65 @@
             hideLoading();
             const grid = document.getElementById('moviesGrid');
             
+            // Cache movies data for rating modal
+            sessionStorage.setItem('allMovies', JSON.stringify(movies));
+            
             if (movies.length === 0) {
                 grid.innerHTML = `<p style="text-align: center; color: #cccccc; grid-column: 1 / -1;">No movies found in this category</p>`;
                 return;
             }
             
-        grid.innerHTML = movies.map(movie => {
+        grid.innerHTML = movies.map((movie, index) => {
                 const posterUrl = getMoviePosterUrl(movie.title, movie.poster_path);
                 
                 return `
                     <div class="movie-card">
-                        <div class="vhs-top">
-                            <div class="vhs-brand">VHS</div>
-                        </div>
-                        <div class="vhs-main">
-                                <div class="tape-reel left">
-                                <div class="tape-reel-center"></div>
+                        ${posterUrl ? `<div class="movie-poster" style="background-image: url('${posterUrl}')"></div>` : ''}
+                        <div class="vhs-container" data-movie-title="${movie.title}" data-movie-index="${index}">
+                            <div class="vhs-top">
+                                <div class="vhs-brand">VHS</div>
                             </div>
-                            <div class="vhs-label">
-                                <div class="vhs-cassette-section">
-                                    <div class="vhs-cassette-text">VIDEO CASSETTE</div>
+                            <div class="vhs-main">
+                                    <div class="tape-reel left">
+                                    <div class="tape-reel-center"></div>
                                 </div>
-                                <div class="vhs-content-section">
-                                    <div class="vhs-title">${movie.title.length > 16 ? movie.title.substring(0, 14) + '...' : movie.title}</div>
-                                    <div class="vhs-year">${movie.year}</div>
-                                    <div class="vhs-category">${movie.horror_category || 'Horror'}</div>
-                                </div>
-                                <div class="vhs-rating-section">
-                                    <div class="vhs-rating">
-                                        <span class="rating-stars">${'★'.repeat(Math.round(movie.vote_average / 2))}</span>
-                                        <span>${movie.vote_average}/10</span>
-                                        ${movie.rating ? `<span>Your: ${movie.rating}/10</span>` : ''}
+                                <div class="vhs-label">
+                                    <div class="vhs-cassette-section">
+                                        <div class="vhs-cassette-text">VIDEO CASSETTE</div>
+                                    </div>
+                                    <div class="vhs-content-section">
+                                        <div class="vhs-title">${movie.title.length > 16 ? movie.title.substring(0, 14) + '...' : movie.title}</div>
+                                        <div class="vhs-year">${movie.year}</div>
+                                        <div class="vhs-category">${movie.horror_category || 'Horror'}</div>
+                                    </div>
+                                    <div class="vhs-rating-section">
+                                        <div class="vhs-rating">
+                                            ${movie.rating ? `
+                                                <span class="rating-stars">${'★'.repeat(Math.round(movie.rating))}</span>
+                                                <span>You: ${movie.rating}/10</span>
+                                            ` : `
+                                                <button class="rate-btn" data-rate-movie="${movie.title}">Rate This</button>
+                                            `}
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="tape-reel right">
+                                    <div class="tape-reel-center"></div>
+                                </div>
                             </div>
-                            <div class="tape-reel right">
-                                <div class="tape-reel-center"></div>
+                            <div class="vhs-bottom">
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
                             </div>
-                        </div>
-                        <div class="vhs-bottom">
-                            <div class="vhs-screw"></div>
-                            <div class="vhs-screw"></div>
-                            <div class="vhs-screw"></div>
-                            <div class="vhs-screw"></div>
                         </div>
                     </div>
                 `;
             }).join('');
+
+            // Add event listeners for VHS containers and rate buttons
+            addMovieEventListeners();
         }
         
         function displayPredictions(predictions) {
@@ -249,40 +870,43 @@
                 const posterUrl = getMoviePosterUrl(pred.title, pred.poster_path);
                 
                 return `
-                    <div class="movie-card">    
-                        <div class="vhs-top">
-                            <div class="vhs-brand">VHS</div>
-                        </div>
-                        <div class="vhs-main">
-                            <div class="tape-reel left">
-                                <div class="tape-reel-center"></div>
+                    <div class="movie-card">
+                        ${posterUrl ? `<div class="movie-poster" style="background-image: url('${posterUrl}')"></div>` : ''}
+                        <div class="vhs-container">
+                            <div class="vhs-top">
+                                <div class="vhs-brand">VHS</div>
                             </div>
-                            <div class="vhs-label">
-                                <div class="vhs-cassette-section">
-                                    <div class="vhs-cassette-text">VIDEO CASSETTE</div>
+                            <div class="vhs-main">
+                                <div class="tape-reel left">
+                                    <div class="tape-reel-center"></div>
                                 </div>
-                                <div class="vhs-content-section">
-                                    <div class="vhs-title">${pred.title.length > 16 ? pred.title.substring(0, 14) + '...' : pred.title}</div>
-                                    <div class="vhs-year">${pred.year || 'N/A'}</div>
-                                    <div class="vhs-category">${pred.horror_category || 'Horror'}</div>
-                                </div>
-                                <div class="vhs-rating-section">
-                                    <div class="vhs-rating">
-                                        <span class="rating-stars">${'★'.repeat(Math.round(pred.predicted_rating))}</span>
-                                        <span>Pred: ${pred.predicted_rating}/10</span>
-                                        <span>${Math.round(pred.confidence * 100)}%</span>
+                                <div class="vhs-label">
+                                    <div class="vhs-cassette-section">
+                                        <div class="vhs-cassette-text">VIDEO CASSETTE</div>
+                                    </div>
+                                    <div class="vhs-content-section">
+                                        <div class="vhs-title">${pred.title.length > 16 ? pred.title.substring(0, 14) + '...' : pred.title}</div>
+                                        <div class="vhs-year">${pred.year || 'N/A'}</div>
+                                        <div class="vhs-category">${pred.horror_category || 'Horror'}</div>
+                                    </div>
+                                    <div class="vhs-rating-section">
+                                        <div class="vhs-rating">
+                                            <span class="rating-stars">${'★'.repeat(Math.round(pred.predicted_rating))}</span>
+                                            <span>Pred: ${pred.predicted_rating}/10</span>
+                                            <span>${Math.round(pred.confidence * 100)}%</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="tape-reel right">
+                                    <div class="tape-reel-center"></div>
+                                </div>
                             </div>
-                            <div class="tape-reel right">
-                                <div class="tape-reel-center"></div>
+                            <div class="vhs-bottom">
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
                             </div>
-                        </div>
-                        <div class="vhs-bottom">
-                            <div class="vhs-screw"></div>
-                            <div class="vhs-screw"></div>
-                            <div class="vhs-screw"></div>
-                            <div class="vhs-screw"></div>
                         </div>
                     </div>
                 `;
@@ -308,6 +932,82 @@
                 </div>
             `;
         }
+        
+        // Load watched movies into slider
+        async function loadWatchedMoviesSlider() {
+            try {
+                const response = await fetch(`${API_BASE}/watched`);
+                if (response.ok) {
+                    const movies = await response.json();
+                    displayWatchedMoviesSlider(movies.slice(0, 10)); // Show first 10 movies
+                }
+            } catch (error) {
+                console.error('Error loading watched movies:', error);
+            }
+        }
+        
+        function displayWatchedMoviesSlider(movies) {
+            const slider = document.getElementById('watchedMoviesSlider');
+            
+            if (movies.length === 0) {
+                slider.innerHTML = `<p style="color: #cccccc; text-align: center; width: 100%;">No watched movies yet</p>`;
+                return;
+            }
+            
+            slider.innerHTML = movies.map((movie, index) => {
+                const posterUrl = getMoviePosterUrl(movie.title, movie.poster_path);
+                return `
+                    <div class="slider-movie-card">
+                        ${posterUrl ? `<div class="movie-poster" style="background-image: url('${posterUrl}')"></div>` : ''}
+                        <div class="vhs-container" data-movie-title="${movie.title}" data-movie-index="slider-${index}">
+                            <div class="vhs-top">
+                                <div class="vhs-brand">VHS</div>
+                            </div>
+                            <div class="vhs-main">
+                                <div class="tape-reel left">
+                                    <div class="tape-reel-center"></div>
+                                </div>
+                                <div class="vhs-label">
+                                    <div class="vhs-cassette-section">
+                                        <div class="vhs-cassette-text">VIDEO CASSETTE</div>
+                                    </div>
+                                    <div class="vhs-content-section">
+                                        <div class="vhs-title">${movie.title.length > 16 ? movie.title.substring(0, 14) + '...' : movie.title}</div>
+                                        <div class="vhs-year">${movie.year}</div>
+                                        <div class="vhs-category">${movie.horror_category || 'Horror'}</div>
+                                    </div>
+                                    <div class="vhs-rating-section">
+                                        <div class="vhs-rating">
+                                            ${movie.rating ? `
+                                                <span class="rating-stars">${'★'.repeat(Math.round(movie.rating))}</span>
+                                                <span>You: ${movie.rating}/10</span>
+                                            ` : `
+                                                <button class="rate-btn" data-rate-movie="${movie.title}">Rate This</button>
+                                            `}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tape-reel right">
+                                    <div class="tape-reel-center"></div>
+                                </div>
+                            </div>
+                            <div class="vhs-bottom">
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                                <div class="vhs-screw"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Add event listeners for slider movies too
+            addMovieEventListeners();
+        }
+        
+        // Load watched movies when page loads
+        window.addEventListener('load', loadWatchedMoviesSlider);
     </script>
 </body>
 </html>

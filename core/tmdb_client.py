@@ -79,3 +79,22 @@ class TMDBClient:
         except Exception as e:
             print(f"Error fetching poster for '{title}': {e}")
             return None
+    
+    def discover_movies(self, with_genres: List[int] = None, page: int = 1, 
+                       sort_by: str = 'popularity.desc', vote_average_gte: float = None,
+                       vote_count_gte: int = None) -> List[Dict]:
+        """Discover movies using various filters"""
+        params = {
+            'page': page,
+            'sort_by': sort_by
+        }
+        
+        if with_genres:
+            params['with_genres'] = ','.join(map(str, with_genres))
+        if vote_average_gte is not None:
+            params['vote_average.gte'] = vote_average_gte
+        if vote_count_gte is not None:
+            params['vote_count.gte'] = vote_count_gte
+        
+        data = self._make_request('/discover/movie', params)
+        return data.get('results', [])

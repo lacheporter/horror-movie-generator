@@ -9,9 +9,14 @@ Run this file to start the API server on http://localhost:8000
 Usage: python app.py
 """
 
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.routes.movies import router as movies_router
+
+# Load environment variables
+load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI(

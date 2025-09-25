@@ -148,6 +148,32 @@ class MovieDataService:
         return [movie for movie in WATCHED_MOVIES_DATA if movie['rating'] is None]
     
     @staticmethod
+    def rate_movie(movie_title: str, rating: float) -> bool:
+        """Rate a movie by title. Returns True if successful, False if movie not found."""
+        for movie in WATCHED_MOVIES_DATA:
+            if movie['title'].lower() == movie_title.lower():
+                movie['rating'] = round(rating, 1)
+                return True
+        return False
+    
+    @staticmethod
+    def remove_rating(movie_title: str) -> bool:
+        """Remove rating from a movie. Returns True if successful, False if movie not found."""
+        for movie in WATCHED_MOVIES_DATA:
+            if movie['title'].lower() == movie_title.lower():
+                movie['rating'] = None
+                return True
+        return False
+    
+    @staticmethod
+    def get_movie_by_title(movie_title: str) -> Dict:
+        """Get a specific movie by title"""
+        for movie in WATCHED_MOVIES_DATA:
+            if movie['title'].lower() == movie_title.lower():
+                return movie.copy()
+        return None
+    
+    @staticmethod
     def get_user_stats() -> Dict:
         """Calculate user statistics including horror category preferences"""
         all_movies = MovieDataService.get_all_movies()
