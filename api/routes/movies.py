@@ -1,14 +1,6 @@
-"""
-API Routes - Movie Endpoints
-=============================
-Defines REST API endpoints for movie-related operations:
-- GET /api/movies/watched - List of watched movies
-- GET /api/movies/recommendations - Get movie recommendations  
-- GET /api/movies/predictions - Get rating predictions
-- GET /api/movies/stats - User statistics and preferences
 
-All endpoints return JSON responses using Pydantic models for type safety.
-"""
+#Defines REST API endpoints for movie-related operations:
+
 
 from fastapi import APIRouter, HTTPException
 from typing import List
@@ -80,3 +72,58 @@ async def get_user_stats():
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}")
+
+@router.get("/by-category/{category}", response_model=List[Movie])
+async def get_movies_by_horror_category(category: str):
+    """Get movies filtered by horror category: gory, creepy, mysterious, jumpscare"""
+    valid_categories = ['gory', 'creepy', 'mysterious', 'jumpscare']
+    
+    if category.lower() not in valid_categories:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Invalid category. Must be one of: {', '.join(valid_categories)}"
+        )
+    
+    try:
+        all_movies = MovieDataService.get_all_movies()
+        filtered_movies = [
+            movie for movie in all_movies 
+            if movie.get('horror_category', '').lower() == category.lower()
+        ]
+        
+        return [Movie(**movie) for movie in filtered_movies]
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get movies by category: {str(e)}")
+
+@router.get("/categories")
+async def get_horror_categories():
+    """Get available horror categories with movie counts"""
+    try:
+        all_movies = MovieDataService.get_all_movies()
+        
+        category_counts = {}
+        for movie in all_movies:
+            category = movie.get('horror_category', 'unknown')
+            category_counts[category] = category_counts.get(category, 0) + 1
+        
+        categories = [
+            {"name": category, "count": count, "description": _get_category_description(category)}
+            for category, count in category_counts.items()
+            if category != 'unknown'
+        ]
+        
+        return {"categories": categories}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get categories: {str(e)}")
+
+def _get_category_description(category: str) -> str:
+    """Get description for horror categories"""
+    descriptions = {
+        'gory': 'Blood, violence, and brutal visuals',
+        'creepy': 'Psychologically unsettling and disturbing',
+        'mysterious': 'Puzzles, investigations, and hidden secrets',
+        'jumpscare': 'Sudden scares and paranormal frights'
+    }
+    return descriptions.get(category.lower(), 'Unknown category')

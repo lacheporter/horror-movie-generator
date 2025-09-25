@@ -44,4 +44,25 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    import signal
+    import sys
+    
+    def signal_handler(sig, frame):
+        print('\n🛑 Shutting down API server...')
+        sys.exit(0)
+    
+    # Handle Ctrl+C gracefully
+    signal.signal(signal.SIGINT, signal_handler)
+    
+    print("🚀 Starting Horror Movie API Server...")
+    print("📍 Server will run at: http://localhost:8000")
+    print("📖 API docs available at: http://localhost:8000/docs")
+    print("🛑 Press Ctrl+C to stop")
+    
+    try:
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+    except KeyboardInterrupt:
+        print("\n👋 API server stopped!")
+    except Exception as e:
+        print(f"❌ Server error: {e}")
+        sys.exit(1)

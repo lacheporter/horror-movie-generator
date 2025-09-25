@@ -7,14 +7,11 @@ Provides a simple terminal-based interface with 3 options:
 2. Get AI-powered rating predictions for unrated movies  
 3. Exit the application
 
-Usage: python cli/main.py
+Usage: python main.py
 """
 
 import os
 import sys
-
-# Add parent directory to Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from core.recommendation_service import MovieRecommendationService
 from core.prediction_service import RatingPredictionService

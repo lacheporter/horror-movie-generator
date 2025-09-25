@@ -61,3 +61,21 @@ class TMDBClient:
         data = self._make_request(f'/movie/{movie_id}/similar', params)
         results = data.get('results', [])
         return results[:limit]
+    
+    def get_movie_details(self, movie_id: int) -> Dict:
+        """Get detailed movie information by ID"""
+        return self._make_request(f'/movie/{movie_id}')
+    
+    def get_movie_poster_path(self, title: str, year: Optional[str] = None) -> Optional[str]:
+        """Get poster path for a movie by searching title and year"""
+        try:
+            year_int = int(year) if year and year.isdigit() else None
+            results = self.search_movie(title, year_int)
+            
+            if results:
+                # Return the poster path of the first (best) match
+                return results[0].get('poster_path')
+            return None
+        except Exception as e:
+            print(f"Error fetching poster for '{title}': {e}")
+            return None

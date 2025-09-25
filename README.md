@@ -1,6 +1,34 @@
 # Movie Recommendation System - Organized Structure
 
-A comprehensive movie recommendation system with machine learning-based rating predictions, built with FastAPI for mobile app development.
+A comprehensive movie recommendation syst#### Manual Commands (Alternative)
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Start API server
+python app.py
+# or more standard FastAPI way:
+uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+
+# Start frontend (in another terminal)
+python serve_frontend.py
+
+# CLI interface
+python main.py
+```
+
+#### Port Management
+```bash
+# If ports get stuck, clean them up
+./cleanup_ports.sh
+
+# Or manually check what's running
+lsof -i :8000 -i :3000
+
+# Kill specific processes
+kill $(lsof -t -i:8000)  # Kill API server
+kill $(lsof -t -i:3000)  # Kill frontend server
+```hine learning-based rating predictions, built with FastAPI for mobile app development.
 
 ## 🏗️ Project Structure
 
@@ -82,22 +110,49 @@ echo "TMDB_API_KEY=your_api_key_here" > .env
 
 ### Running the Applications
 
-#### FastAPI Server
+#### Quick Setup (First Time)
 ```bash
-# Start the API server
-python app.py
-
-# Access the API
-curl http://localhost:8000/health
-
-# View API documentation
-open http://localhost:8000/docs
+# Create virtual environment and install dependencies
+python3 -m venv venv
+source venv/bin/activate  # On macOS/Linux
+pip install -r requirements.txt
 ```
 
-#### CLI Application
+#### Standard Python Commands (Recommended)
 ```bash
-# Run the command line interface
-python cli/main.py
+# Activate virtual environment (do this first)
+source venv/bin/activate
+
+# Start API server
+python app.py
+
+# Start web frontend (in another terminal)
+python serve_frontend.py
+
+# Or run CLI interface instead
+python main.py
+```
+
+#### Alternative FastAPI Commands
+```bash
+# More professional FastAPI approach
+uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+
+# Run with specific Python version
+python3 app.py
+
+# Run from virtual environment directly
+./venv/bin/python app.py
+```
+
+#### Development Shortcuts (Optional)
+```bash
+# Use the custom launcher script (starts both servers)
+./start_app.sh
+
+# Or use make commands (if you prefer)
+make run-api        # python app.py
+make run-cli        # python main.py
 ```
 
 ## 📚 API Documentation
@@ -136,7 +191,7 @@ curl -X GET "http://localhost:8000/api/movies/watched"
 curl -X GET "http://localhost:8000/api/movies/predictions"
 
 # Test CLI (interactive)
-python cli/main.py
+python main.py
 ```
 
 ## 🔧 Architecture
