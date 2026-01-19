@@ -1,53 +1,29 @@
-# Movie Recommendation System - Organized Structure
+# NightReel API Backend
 
-A comprehensive movie recommendation syst#### Manual Commands (Alternative)
-```bash
-# Activate virtual environment
-source venv/bin/activate
-
-# Start API server
-python app.py
-# or more standard FastAPI way:
-uvicorn app:app --host 0.0.0.0 --port 8000 --reload
-
-# Start frontend (in another terminal)
-python serve_frontend.py
-
-# CLI interface
-python main.py
-```
-
-#### Port Management
-```bash
-# If ports get stuck, clean them up
-./cleanup_ports.sh
-
-# Or manually check what's running
-lsof -i :8000 -i :3000
-
-# Kill specific processes
-kill $(lsof -t -i:8000)  # Kill API server
-kill $(lsof -t -i:3000)  # Kill frontend server
-```hine learning-based rating predictions, built with FastAPI for mobile app development.
+A clean, mobile-ready FastAPI backend for horror movie recommendations with machine learning-based rating predictions. **NightReel** - your personal horror movie discovery engine, designed specifically for iOS app consumption.
 
 ## 🏗️ Project Structure
 
 ```
-horror-movie-generator/
-├── 📁 api/                     # API layer
-│   ├── __init__.py
+nightreel/
+├── 📁 api/                     # FastAPI routes & models
 │   ├── models/
-│   │   ├── __init__.py
-│   │   └── movie_models.py     # Pydantic models for API requests/responses
+│   │   └── movie_models.py     # Pydantic request/response models
 │   └── routes/
-│       ├── __init__.py
-│       └── movies.py           # Movie-related API endpoints
-├── 📁 core/                    # Core business logic
-│   ├── __init__.py
-│   ├── tmdb_client.py          # TMDB API client wrapper
+│       └── movies.py           # Movie API endpoints
+├── 📁 core/                    # Business logic & services
+│   ├── tmdb_client.py          # TMDB API integration
 │   ├── recommendation_service.py # Movie recommendation engine
-│   └── prediction_service.py   # Rating prediction algorithms
+│   ├── prediction_service.py   # ML rating predictions
+│   └── supabase_service.py     # Database integration (optional)
 ├── 📁 data/                    # Data management
+│   └── movie_data.py           # Sample movie data
+├── app.py                      # Main FastAPI application
+├── requirements.txt            # Python dependencies
+├── schema.sql                  # Database schema (optional)
+├── setup_supabase.py           # Database setup script (optional)
+├── .env                        # API keys & configuration
+└── Makefile                    # Build commands
 │   ├── __init__.py
 │   └── movie_data.py           # Centralized movie data and statistics
 ├── 📁 cli/                     # Command line interface
@@ -74,15 +50,16 @@ horror-movie-generator/
 - Genre-based similarity analysis
 - Confidence scoring
 
-### 🔌 API Endpoints
-- RESTful API for mobile app integration
-- FastAPI with automatic documentation
-- CORS enabled for cross-origin requests
+### 🔌 Mobile-Ready API
+- RESTful endpoints optimized for iOS consumption
+- FastAPI with automatic OpenAPI documentation
+- CORS enabled for mobile app integration
+- Health checks and error handling
 
-### 💻 CLI Interface
-- Simple 3-option menu (Recommendations, Predictions, Exit)
-- User-friendly terminal interface
-- Streamlined movie management
+### 🗄️ Database Options
+- Static sample data (default)
+- Optional Supabase PostgreSQL integration
+- Migration scripts included
 
 ## 🛠️ Setup and Installation
 
@@ -94,7 +71,7 @@ horror-movie-generator/
 ### Installation
 ```bash
 # Clone the repository
-cd /path/to/horror-movie-generator
+cd /path/to/nightreel
 
 # Create and activate virtual environment
 python3 -m venv venv
@@ -118,41 +95,25 @@ source venv/bin/activate  # On macOS/Linux
 pip install -r requirements.txt
 ```
 
-#### Standard Python Commands (Recommended)
+#### Quick Start
 ```bash
-# Activate virtual environment (do this first)
+# Activate virtual environment
 source venv/bin/activate
 
-# Start API server
+# Start the API server
 python app.py
-
-# Start web frontend (in another terminal)
-python serve_frontend.py
-
-# Or run CLI interface instead
-python main.py
+# Server runs at http://localhost:8000
 ```
 
-#### Alternative FastAPI Commands
+#### Alternative Commands
 ```bash
-# More professional FastAPI approach
+# Using FastAPI directly
 uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 
-# Run with specific Python version
-python3 app.py
-
-# Run from virtual environment directly
-./venv/bin/python app.py
-```
-
-#### Development Shortcuts (Optional)
-```bash
-# Use the custom launcher script (starts both servers)
-./start_app.sh
-
-# Or use make commands (if you prefer)
-make run-api        # python app.py
-make run-cli        # python main.py
+# Using Make commands
+make run        # Start server
+make test       # Test endpoints
+make clean      # Clean cache files
 ```
 
 ## 📚 API Documentation
@@ -169,29 +130,33 @@ make run-cli        # python main.py
 - `GET /api/movies/predictions` - Get rating predictions for unrated movies
 - `GET /api/movies/stats` - Get user statistics and preferences
 
+### Mobile-Optimized Endpoints
+- `GET /health/mobile` - Mobile app health check
+- `GET /api/movies/moods` - Available movie moods
+- `GET /api/movies/spin?mood=creepy` - Get random movie by mood
+- `GET /api/movies/recommendations` - Personalized recommendations
+- `GET /api/movies/predictions` - Rating predictions
+- `GET /api/movies/stats` - User statistics
+
 ### Response Models
-All API responses use Pydantic models for type safety:
-- `Movie` - Individual movie with rating and metadata
+- `Movie` - Movie data with ratings and metadata
 - `MovieRecommendation` - Recommended movie with similarity score
-- `RatingPrediction` - Predicted rating with confidence level
-- `UserStats` - User preferences and statistics
+- `RatingPrediction` - ML-predicted rating with confidence
+- `UserStats` - User preferences and viewing statistics
 
 ## 🧪 Testing
 
-### Test the Structure
 ```bash
-# Test all imports and basic functionality
-python test_structure.py
-```
+# Test API health
+curl http://localhost:8000/health
 
-### Test Individual Components
-```bash
-# Test API endpoints
-curl -X GET "http://localhost:8000/api/movies/watched"
-curl -X GET "http://localhost:8000/api/movies/predictions"
+# Test mobile endpoints
+curl http://localhost:8000/health/mobile
+curl "http://localhost:8000/api/movies/moods"
+curl "http://localhost:8000/api/movies/spin?mood=creepy"
 
-# Test CLI (interactive)
-python main.py
+# View API documentation
+open http://localhost:8000/docs
 ```
 
 ## 🔧 Architecture
@@ -225,47 +190,63 @@ This backend is specifically designed for mobile app development:
 - **Automatic documentation** at `/docs`
 - **Error handling** with appropriate HTTP status codes
 
-### Recommended Mobile Integration
-```javascript
-// Example mobile app integration
-const API_BASE = 'http://your-server:8000/api/movies';
-
-// Get recommendations
-fetch(`${API_BASE}/recommendations?limit=10`)
-  .then(response => response.json())
-  .then(movies => displayRecommendations(movies));
-
-// Get rating predictions
-fetch(`${API_BASE}/predictions`)
-  .then(response => response.json())
-  .then(predictions => showPredictions(predictions));
+### Swift iOS Integration
+```swift
+// APIService.swift - Example integration
+struct APIService {
+    static let baseURL = "http://localhost:8000"
+    
+    static func getMovieMoods() async throws -> [String] {
+        let url = URL(string: "\(baseURL)/api/movies/moods")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try JSONDecoder().decode([String].self, from: data)
+    }
+    
+    static func spinMovie(mood: String) async throws -> Movie {
+        let url = URL(string: "\(baseURL)/api/movies/spin?mood=\(mood)")!
+        let (data, _) = try await URLSession.shared.data(from: url)
+        return try JSONDecoder().decode(Movie.self, from: data)
+    }
+}
 ```
 
-## 🔄 Migration from Legacy Code
+## �️ Optional Database Setup
 
-The original monolithic files are being gradually replaced:
-- ✅ `main.py` → `cli/main.py` (Simplified 3-option interface)
-- ✅ `src/movie_recommender.py` → `core/recommendation_service.py`
-- ✅ `src/rating_predictor.py` → `core/prediction_service.py`
-- ✅ Hardcoded data → `data/movie_data.py`
-- ✅ `app_simple.py` → `app.py` (Organized with proper routing)
+By default, the API uses sample data. For persistent storage:
+
+```bash
+# Set up Supabase (optional)
+python setup_supabase.py
+
+# Update .env with your Supabase credentials
+SUPABASE_URL=your_project_url
+SUPABASE_ANON_KEY=your_anon_key
+```
 
 ## 🏃‍♂️ Quick Start
 
-1. **Start the API server**: `python app.py`
-2. **Test in another terminal**: `curl http://localhost:8000/health`
-3. **Try the CLI**: `python cli/main.py`
+1. **Activate environment**: `source venv/bin/activate`
+2. **Start the API server**: `python app.py`
+3. **Test the API**: `curl http://localhost:8000/health/mobile`
 4. **View API docs**: Open `http://localhost:8000/docs` in browser
+5. **Build your iOS app**: Use the Swift examples above
 
-## 🎯 Future Enhancements
+## 🚀 Next Steps for iOS Development
 
-- [ ] Database integration (replace static data)
-- [ ] User authentication and personalized watchlists
-- [ ] More sophisticated ML models
+1. **Create Xcode project** with provided Swift code examples
+2. **Deploy backend** to Railway, Render, or similar service
+3. **Update API base URL** in iOS app to production endpoint
+4. **Optional**: Set up Supabase for user data persistence
+
+## 🎯 Future Backend Enhancements
+
+- [ ] User authentication with JWT tokens
+- [ ] Rate limiting and API security
+- [ ] Enhanced ML recommendation models
 - [ ] Caching layer for better performance
-- [ ] Containerization with Docker
-- [ ] Production deployment configuration
+- [ ] Docker containerization
+- [ ] CI/CD pipeline setup
 
 ---
 
-**Note**: This organized structure provides a scalable foundation for mobile app development while maintaining the simplicity of the original CLI application.
+**NightReel provides a clean, mobile-ready API foundation for your iOS horror movie discovery app.**

@@ -30,9 +30,20 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Configure properly for production
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
+
+# Add middleware for mobile optimization
+@app.middleware("http")
+async def mobile_optimization_middleware(request, call_next):
+    response = await call_next(request)
+    
+    # Add mobile-friendly headers
+    response.headers["Cache-Control"] = "public, max-age=300"  # 5 min cache for mobile
+    response.headers["X-Mobile-API"] = "v1.0.0"
+    
+    return response
 
 # Include API routes  
 app.include_router(movies_router)
@@ -59,7 +70,7 @@ if __name__ == "__main__":
     # Handle Ctrl+C gracefully
     signal.signal(signal.SIGINT, signal_handler)
     
-    print("🚀 Starting Horror Movie API Server...")
+    print("🚀 Starting NightReel API Server...")
     print("📍 Server will run at: http://localhost:8000")
     print("📖 API docs available at: http://localhost:8000/docs")
     print("🛑 Press Ctrl+C to stop")

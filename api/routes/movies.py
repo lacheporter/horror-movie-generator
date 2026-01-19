@@ -230,6 +230,34 @@ async def get_user_stats():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get stats: {str(e)}")
 
+@router.get("/health/mobile")
+async def mobile_health_check():
+    """Health check specifically for mobile app"""
+    return {
+        "status": "healthy",
+        "version": "1.0.0",
+        "mobile_api": True,
+        "endpoints": {
+            "spin_roulette": "/api/movies/spin-roulette/{mood}",
+            "rate_movie": "/api/movies/rate/{movie_title}",
+            "stats": "/api/movies/stats",
+            "recommendations": "/api/movies/recommendations"
+        }
+    }
+
+@router.get("/moods")
+async def get_available_moods():
+    """Get list of available horror moods for mobile app"""
+    moods = [
+        {"id": "gory", "name": "Gory", "icon": "🩸", "description": "Blood, violence, and brutal visuals"},
+        {"id": "creepy", "name": "Creepy", "icon": "👁", "description": "Psychologically unsettling"},
+        {"id": "mysterious", "name": "Mysterious", "icon": "🔍", "description": "Puzzles and hidden secrets"},
+        {"id": "jumpscare", "name": "Jumpscare", "icon": "👻", "description": "Sudden scares and frights"},
+        {"id": "body-horror", "name": "Body Horror", "icon": "🧬", "description": "Disturbing bodily transformations"},
+        {"id": "paranoid", "name": "Paranoia", "icon": "🧠", "description": "Question reality and trust"}
+    ]
+    return {"moods": moods}
+
 @router.get("/by-category/{category}", response_model=List[Movie])
 async def get_movies_by_horror_category(category: str):
     """Get movies filtered by horror category: gory, creepy, mysterious, jumpscare, body-horror, paranoid"""
